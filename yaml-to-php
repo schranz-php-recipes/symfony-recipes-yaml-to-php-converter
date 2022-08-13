@@ -3,13 +3,13 @@
 
 declare(strict_types=1);
 
-
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\SingleCommandApplication;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
@@ -19,7 +19,114 @@ require getcwd().'/vendor/autoload.php';
 
 (new SingleCommandApplication())
     ->setName('Yaml to PHP Converter')
+    ->addArgument('source-repository', InputArgument::REQUIRED, 'Repository with yaml config files')
     ->setCode(function (InputInterface $input, OutputInterface $output) {
+        $filesystem = new Filesystem();
+
+        if ($filesystem->exists('.source-repository')) {
+            $filesystem->remove('.source-repository');
+        }
+
+        $sourceRepository = $input->getArgument('source-repository');
+
+        $process = new Process([
+            'git',
+            'clone',
+            $sourceRepository,
+            '.source-repository'
+        ]);
+
+        render(<<<HTML
+            <div class="my-1 mx-2 bg-blue p-1 px-2">
+                <div class="font-bold">Clone Repository</div>
+            </div>
+        HTML);
+
+        if (!$process->run()) {
+            render(<<<HTML
+                <div class="flex space-x-1 mx-2">
+                    <span class="font-bold">{$sourceRepository}</span>
+                    <span class="flex-1 content-repeat-[.] text-gray"></span>
+                    <span class="font-bold text-green uppercase">Success</span>
+                </div>
+            HTML);
+        } else {
+            render(<<<HTML
+                <div>
+                    <div class="flex space-x-1 mx-2">
+                        <span class="font-bold">{$sourceRepository}</span>
+                        <span class="flex-1 content-repeat-[.] text-gray"></span>
+                        <span class="font-bold text-red uppercase">Failed</span>
+                    </div>
+                    <div class="ml-4">
+                        {$process->getErrorOutput()}
+                    </div>
+                </div>
+            HTML);
+
+            return 1;
+        }
+
+        render(<<<HTML
+            <div class="my-1 mx-2 bg-blue p-1 px-2">
+                <div class="font-bold">Create copy of packages</div>
+            </div>
+        HTML);
+
+        $finder = new Finder();
+        $finder
+            ->in('.source-repository')
+            ->sortByName()
+            ->directories()
+            ->depth(0);
+
+        $count = 0;
+        foreach ($finder as $key => $directory) {
+            if ($filesystem->exists($directory->getFilename())) {
+                $filesystem->remove($directory->getFilename());
+            }
+
+            $filesystem->rename($directory->getPathname(), $directory->getFilename());
+
+            render(<<<HTML
+                <div class="flex space-x-1 mx-2">
+                    <span class="font-bold">{$directory->getFilename()}</span>
+                    <span class="flex-1 content-repeat-[.] text-gray"></span>
+                    <span class="font-bold text-green uppercase">Success</span>
+                </div>
+            HTML);
+        }
+
+        render(<<<HTML
+            <div class="my-1 mx-2 bg-blue p-1 px-2">
+                <div class="font-bold">Copy workflow files</div>
+            </div>
+        HTML);
+
+        $finder = new Finder();
+        $finder
+            ->in('.source-repository/.github')
+            ->sortByName()
+            ->files();
+
+        $count = 0;
+        foreach ($finder as $key => $directory) {
+            $targetFileName = \str_replace('.source-repository/', '', $directory->getPathname());
+
+            $filesystem->mkdir(\dirname($targetFileName));
+            $filesystem->rename($directory->getPathname(), $targetFileName, true);
+
+            render(<<<HTML
+                <div class="flex space-x-1 mx-2">
+                    <span class="font-bold">{$targetFileName}</span>
+                    <span class="flex-1 content-repeat-[.] text-gray"></span>
+                    <span class="font-bold text-green uppercase">Success</span>
+                </div>
+            HTML);
+        }
+
+        $filesystem->remove('.source-repository');
+
         $exit = 0;
 
         /**
@@ -31,6 +138,7 @@ require getcwd().'/vendor/autoload.php';
             $finder
                 ->in(getcwd())
                 ->directories()
+                ->sortByName()
                 ->exclude('vendor')
                 ->depth(3);
 

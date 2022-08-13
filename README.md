@@ -11,7 +11,8 @@ It is used in:
 To convert the official symfony recipes.
 
 ```php
-vendor/bin/yaml-to-php
+vendor/bin/yaml-to-php git@github.com:symfony/recipes.git
+vendor/bin/yaml-to-php git@github.com:symfony/recipes-contrib.git
 ```
 
 If you are not converting a recipes repository you should use the [symplify/config-transformer](github.com/symplify/config-transformer)
