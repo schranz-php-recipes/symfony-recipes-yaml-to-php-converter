@@ -1,0 +1,151 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
+
+use function Termwind\{render};
+
+require getcwd().'/vendor/autoload.php';
+
+$exit = 0;
+
+/**
+ * @return Generator<string>
+ */
+function getDirectories(): Generator
+{
+    $finder = new Finder();
+    $finder
+        ->in(getcwd())
+        ->directories()
+        ->exclude('vendor')
+        ->depth(3);
+
+    foreach ($finder as $directory) {
+        if ('config' === $directory->getFilename()) {
+            yield $directory->getPathname();
+        }
+    }
+}
+
+render(<<<HTML
+    <div class="my-1 mx-2 bg-blue p-1 px-2">
+        <div class="font-bold">Convert configs</div>
+    </div>
+HTML);
+
+$successes = [];
+$errors = [];
+
+foreach (getDirectories() as $directory) {
+    $process = new Process([
+        \PHP_BINARY,
+        getcwd().'/vendor/bin/config-transformer',
+        'switch-format',
+        $directory,
+    ]);
+
+    $relativeDirectory = str_replace(getcwd().'/', '', $directory);
+
+    $class = 'text-green';
+    $status = 'success';
+
+    try {
+        $process->mustRun();
+
+        $successes[$relativeDirectory] = $process->getOutput();
+    } catch (ProcessFailedException $exception) {
+        $exit = 1;
+        $errors[$relativeDirectory] = $exception->getMessage();
+
+        $class = 'text-red';
+        $status = 'failed';
+    }
+
+    render(<<<HTML
+    <div class="flex space-x-1 mx-2">
+        <span class="font-bold">{$relativeDirectory}</span>
+        <span class="flex-1 content-repeat-[.] text-gray"></span>
+        <span class="font-bold {$class} uppercase">{$status}</span>
+    </div>
+HTML);
+}
+
+$process = new Process([
+    \PHP_BINARY,
+    getcwd().'/vendor/bin/ecs',
+    '--fix',
+    '--no-progress-bar',
+]);
+
+render(<<<HTML
+    <div class="my-1 mx-2 bg-blue text-white p-1 px-2">
+        <div class="font-bold">Fix code style</div>
+    </div>
+HTML);
+
+if (\in_array($process->run(), [0, 1], true)) {
+    render(<<<HTML
+        <div>
+            <div class="flex space-x-1 mx-2">
+                <span class="font-bold">Code style</span>
+                <span class="flex-1 content-repeat-[.] text-gray"></span>
+                <span class="font-bold text-green uppercase">Fixed</span>
+            </div>
+        </div>
+HTML);
+} else {
+    $exit = 1;
+
+    render(<<<HTML
+        <div>
+            <div class="flex space-x-1 mx-2">
+                <span class="font-bold">Code Style</span>
+                <span class="flex-1 content-repeat-[.] text-gray"></span>
+                <span class="font-bold text-red uppercase">Failed</span>
+            </div>
+            <div class="ml-4">
+                {$exception->getMessage()}
+            </div>
+        </div>
+HTML);
+}
+
+$text = 'Converted successfully '.count($successes).' config directories.';
+
+render(<<<HTML
+    <div class="my-1 mx-2 bg-green text-white p-1 px-2">
+        <div class="font-bold">{$text}</div>
+    </div>
+HTML);
+
+if (count($errors)) {
+    $text = count($errors).' config directories failed';
+
+    render(<<<HTML
+    <div class="my-1 mx-2 bg-red text-white p-1 px-2">
+        <div class="font-bold">{$text}</div>
+    </div>
+HTML);
+
+    foreach ($errors as $relativeDirectory => $errorOutput) {
+        render(<<<HTML
+            <div>
+                <div class="flex space-x-1 mx-2">
+                    <span class="font-bold">{$relativeDirectory}</span>
+                    <span class="flex-1 content-repeat-[.] text-gray"></span>
+                    <span class="font-bold text-red uppercase">Failed</span>
+                </div>
+                <div class="ml-4">
+                    {$errorOutput}
+                </div>
+            </div>
+        HTML);
+    }
+}
+
+exit($exit);
