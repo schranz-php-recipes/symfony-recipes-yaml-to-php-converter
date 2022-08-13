@@ -80,6 +80,8 @@ $process = new Process([
     getcwd().'/vendor/bin/ecs',
     '--fix',
     '--no-progress-bar',
+    '--config',
+    __DIR__ . '/ecs.php',
 ]);
 
 render(<<<HTML
