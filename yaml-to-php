@@ -109,12 +109,15 @@ require getcwd().'/vendor/autoload.php';
             ->sortByName()
             ->files();
 
-        $count = 0;
-        foreach ($finder as $key => $directory) {
-            $targetFileName = \str_replace('.source-repository/', '', $directory->getPathname());
+        foreach ($finder as $file) {
+            $targetFileName = \str_replace('.source-repository/', '', $file->getPathname());
+
+            if ('PULL_REQUEST_TEMPLATE.md' === $file->getFilename()) {
+                continue;
+            }
 
             $filesystem->mkdir(\dirname($targetFileName));
-            $filesystem->rename($directory->getPathname(), $targetFileName, true);
+            $filesystem->rename($file->getPathname(), $targetFileName, true);
 
             render(<<<HTML
                 <div class="flex space-x-1 mx-2">
@@ -270,5 +273,5 @@ require getcwd().'/vendor/autoload.php';
 
         return $exit;
     }
-)
-->run();
+    )
+    ->run();
