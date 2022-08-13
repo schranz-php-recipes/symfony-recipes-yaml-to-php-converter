@@ -1,4 +1,4 @@
-# Symplify/Config-Transformer Wrapper
+# Symfony Recipes Yaml to PHP Converter
 
 This is a wrapper around the [symplify/config-transformer](github.com/symplify/config-transformer)
 used to convert Symfony Yaml Recipe files to PHP config files.
