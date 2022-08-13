@@ -6,8 +6,8 @@ use Symplify\EasyCodingStandard\Config\ECSConfig;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
 return static function (ECSConfig $ecsConfig): void {
-    $ecsConfig->paths([__DIR__]);
-    $ecsConfig->skip([__DIR__.'/vendor']);
+    $ecsConfig->paths([getcwd()]);
+    $ecsConfig->skip([getcwd().'/vendor']);
 
     $ecsConfig->sets([SetList::ARRAY, SetList::SPACES]);
     $ecsConfig->ruleWithConfiguration(ConcatSpaceFixer::class, [
