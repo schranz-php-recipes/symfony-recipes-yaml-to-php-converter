@@ -10,5 +10,9 @@ It is used in:
 
 To convert the official symfony recipes.
 
+```php
+vendor/bin/yaml-to-php
+```
+
 If you are not converting a recipes repository you should use the [symplify/config-transformer](github.com/symplify/config-transformer)
 directly instead of using this package.
