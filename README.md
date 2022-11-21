@@ -5,8 +5,8 @@ used to convert Symfony core recipes which uses `.yaml` config files to `.php` c
 
 It is used in:
 
- - [https://github.com/alexander-schranz/symfony-recipes-php/](https://github.com/alexander-schranz/symfony-recipes-php/)
- - [https://github.com/alexander-schranz/symfony-recipes-php-contrib/](https://github.com/alexander-schranz/symfony-recipes-php-contrib/)
+ - [https://github.com/symfony-php-recipes/symfony-recipes-php/](https://github.com/symfony-php-recipes/symfony-recipes-php/)
+ - [https://github.com/symfony-php-recipes/symfony-recipes-php-contrib/](https://github.com/symfony-php-recipes/symfony-recipes-php-contrib/)
 
 To convert the official symfony recipes.
 
