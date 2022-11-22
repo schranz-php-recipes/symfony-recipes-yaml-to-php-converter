@@ -24,18 +24,18 @@ There are currently also 2 skeletons shipped which can be used to create new sym
 
 **symfony/skeleton clone:**
 
-[schranz/symfony-php-skeleton](https://github.com/alexander-schranz/symfony-php-skeleton):
+[schranz/symfony-php-skeleton](https://github.com/symfony-php-recipes/symfony-php-skeleton):
 
 ```bash
-composer create-project schranz/symfony-php-skeleton
+composer create-project symfony-php-recipes/symfony-php-skeleton
 ```
 
 **symfony/website-skeleton clone:**
 
-[schranz/symfony-php-website-skeleton](https://github.com/alexander-schranz/symfony-php-website-skeleton):
+[schranz/symfony-php-website-skeleton](https://github.com/symfony-php-recipes/symfony-php-website-skeleton):
 
 ```bash
-composer create-project schranz/symfony-php-website-skeleton
+composer create-project symfony-php-recipes/symfony-php-website-skeleton
 ```
 
 ## Using in exist projects
@@ -49,8 +49,8 @@ after add the following to the `composer` `extra.symfony.endpoint` configuration
             "allow-contrib": false,
             "require": "6.1.*",
             "endpoint": [
-                "https://raw.githubusercontent.com/alexander-schranz/symfony-recipes-php/flex/main/index.json",
-                "https://raw.githubusercontent.com/alexander-schranz/symfony-recipes-php-contrib/flex/main/index.json",
+                "https://raw.githubusercontent.com/symfony-php-recipes/symfony-recipes-php/flex/main/index.json",
+                "https://raw.githubusercontent.com/symfony-php-recipes/symfony-recipes-php-contrib/flex/main/index.json",
                 "flex://defaults"
             ]
         }
