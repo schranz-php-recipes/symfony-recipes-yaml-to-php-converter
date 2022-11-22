@@ -5,8 +5,8 @@ used to convert Symfony core recipes which uses `.yaml` config files to `.php` c
 
 It is used in:
 
- - [https://github.com/symfony-php-recipes/symfony-recipes-php/](https://github.com/symfony-php-recipes/symfony-recipes-php/)
- - [https://github.com/symfony-php-recipes/symfony-recipes-php-contrib/](https://github.com/symfony-php-recipes/symfony-recipes-php-contrib/)
+ - [https://github.com/schranz-php-recipes/symfony-recipes-php/](https://github.com/schranz-php-recipes/symfony-recipes-php/)
+ - [https://github.com/schranz-php-recipes/symfony-recipes-php-contrib/](https://github.com/schranz-php-recipes/symfony-recipes-php-contrib/)
 
 To convert the official symfony recipes.
 
@@ -24,18 +24,18 @@ There are currently also 2 skeletons shipped which can be used to create new sym
 
 **symfony/skeleton clone:**
 
-[schranz/symfony-php-skeleton](https://github.com/symfony-php-recipes/symfony-php-skeleton):
+[schranz-php-recipes/symfony-php-skeleton](https://github.com/schranz-php-recipes/symfony-php-skeleton):
 
 ```bash
-composer create-project symfony-php-recipes/symfony-php-skeleton
+composer create-project schranz-php-recipes/symfony-php-skeleton
 ```
 
 **symfony/website-skeleton clone:**
 
-[schranz/symfony-php-website-skeleton](https://github.com/symfony-php-recipes/symfony-php-website-skeleton):
+[schranz-php-recipes/symfony-php-website-skeleton](https://github.com/schranz-php-recipes/symfony-php-website-skeleton):
 
 ```bash
-composer create-project symfony-php-recipes/symfony-php-website-skeleton
+composer create-project schranz-php-recipes/symfony-php-website-skeleton
 ```
 
 ## Using in exist projects
@@ -49,8 +49,8 @@ after add the following to the `composer` `extra.symfony.endpoint` configuration
             "allow-contrib": false,
             "require": "6.1.*",
             "endpoint": [
-                "https://raw.githubusercontent.com/symfony-php-recipes/symfony-recipes-php/flex/main/index.json",
-                "https://raw.githubusercontent.com/symfony-php-recipes/symfony-recipes-php-contrib/flex/main/index.json",
+                "https://raw.githubusercontent.com/schranz-php-recipes/symfony-recipes-php/flex/main/index.json",
+                "https://raw.githubusercontent.com/schranz-php-recipes/symfony-recipes-php-contrib/flex/main/index.json",
                 "flex://defaults"
             ]
         }
