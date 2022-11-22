@@ -1,5 +1,5 @@
 {
-    "name": "symfony-php-recipes/symfony-recipes-yaml-to-php-converter",
+    "name": "schranz-php-recipes/symfony-recipes-yaml-to-php-converter",
     "description": "A wrapper around symplify/config-transformer used to update recipes and using easy coding standard to fix them. ",
     "license": "MIT",
     "require": {
