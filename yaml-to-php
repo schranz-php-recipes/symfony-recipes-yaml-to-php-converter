@@ -165,7 +165,6 @@ require getcwd().'/vendor/autoload.php';
             $process = new Process([
                 \PHP_BINARY,
                 getcwd().'/vendor/bin/config-transformer',
-                'switch-format',
                 $directory,
             ]);
 
