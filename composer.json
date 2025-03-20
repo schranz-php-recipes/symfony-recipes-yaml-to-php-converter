@@ -4,7 +4,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
-        "symplify/config-transformer": "dev-main as 11.1.4",
+        "symplify/config-transformer": "^12.4",
         "symfony/console": "^6.1",
         "symfony/filesystem": "^6.1",
         "symfony/finder": "^6.1",
